@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    command: python3 manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DEBUG=True  # Assuming you are in development; set to False in production
+      - DB_ENGINE=django.db.backends.postgresql
+      - DB_NAME=betterforce_club_platform
+      - DB_USER=bernardmcweeney
+      - DB_PASSWORD=postgres
+      - DB_HOST=db  # Note: Use the service name 'db' as the host
+      - DB_PORT=5432
+
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: betterforce_club_platform
+      POSTGRES_USER: bernardmcweeney
+      POSTGRES_PASSWORD: postgres
+
+volumes:
+  postgres_data:
